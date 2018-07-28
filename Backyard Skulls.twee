@@ -1,0 +1,483 @@
+﻿:: Start
+<h2>[[There are violent and disturbing images in this game|Menu]]</h2>
+
+
+:: Menu
+<h1>BACKYARD SKULLS</h1> 
+
+A story by Hazel-Rah 
+
+
+<h2>[[Start|Opening]]</h2> 
+<h2>[[Content Warnings|Content Warnings]]</h2>
+<h2>[[Credits|Credits]]</h2>
+
+
+
+:: Content Warnings
+This game contains written descriptions and mentions of suicide, strong violent themes and general horror themes. 
+
+It is not recommended for those under the age of 18 or those with nervous disposition. 
+
+[[Back to menu|Menu]]
+
+
+:: Opening
+Ten seconds into your arrival at the Gethen Manor and you're already starting to feel like you're in a horror movie. 
+
+The rusted gate, stained dirt-brown from years of man's neglect, swings in the breeze, providing no obstacle for you to walk past. 
+
+Your boots trudge through the murky grass as you head up to the manor's door, the path having crumbled into ruins some years prior. 
+
+[[The wooden door beckons|Door]]
+
+
+:: Door
+You approach the door, the fine oak surface remaining as smooth and clean as the day the manor was first built. 
+
+<em>This makes a change from the rest of this place</em> you think to yourself as you look around at the rest of the manor's exterior. 
+
+The stone of the manor walls seems to stretch for an eternity, only stopped by the roof, a triangular dome that blends in with the thick gray clouds in the night sky. Some of the tiles have dropped off, marking the grass around you like gravestones. 
+
+You pull out the [[letter|Letter]] that came with the manor deed, which you consider reading as you open the door that leads into the manor [[foyer|Foyer]] 
+
+
+:: StoryTitle
+Backyard Skulls
+
+
+:: StoryAuthor
+Hazel-Rah
+
+
+:: Credits
+Written by [[Hazel-Rah|https://hazel-rah.itch.io]] 
+
+for [[Gothic Novel Jam|https://itch.io/jam/gothic-novel-jam]]
+
+<h1>Thanks</h1>
+
+Special thanks go to the following people and communities who have helped me through this writing process
+
+[[_Ash|https://twitter.com/CinereusDarrow]]
+[[bailee|https://pilot.itch.io/]]
+[[Owlor|https://owlor.itch.io/]]
+For all their encouragement and support whilst I was writing
+
+The Gothic Novel Jam Discord server 
+The Twine Games Discord server
+For helping me with any issues I had with Twine 
+
+[[AshGary|https://ashgary.itch.io/]]
+For creating the Gothic Novel Jam and Discord server in the first place
+
+And of course, you, for taking time out of your day to play this.
+
+[[Thank you one and all.|Menu]]
+
+
+:: Letter
+My dearest Charles 
+
+You haven't written in so long that I started to fear you have become bored of me. 
+Not a day goes by that I don't miss our time together, all those days spent watching the world go by with my hand wrapped in yours. 
+
+I miss you, and I need to see you again. So I would like to offer something.
+
+Attached to this letter is a deed for the manor, you can own it alongside me. You don't need to worry, my dear, everything is taken care of. 
+
+Please, come visit. 
+
+With love
+
+[[Katherine|Door]]
+
+
+:: Foyer
+<<cyclinglink>>
+
+The foyer is deathly silent, save for the wind howling through broken glass, sounding for all the world like ghosts reclaiming their old homes. 
+
+You begin to wonder why Katherine sent you here. 
+
+The carpet has stains that look like <<cyclinglink "wine" "or is it blood?">>, you walk around it, being careful to not mess your boots. 
+
+"Katherine?" you call out, your voice being swallowed by the manor walls. You decide to ascend the <<cyclinglink "stairwell." "spider-infested, rotted wooden stairwell that creaks as you walk, almost like the house is in pain.">> 
+
+You're faced with a hallway that leads to two bedrooms, [[Katherine's room|Katherine's Room Entrance]] to the left and [[Elise's room|Elise's Room]] to the right. 
+
+<<if $holding is "CellarKey">> 
+A small stairwell sits near the entrance, showing a black, wooden door with a rusted padlock on it. This must be the key to the cellar. You twist the key through the <span id="lock"><<click "lock">><<replace "#lock">>lock, before a shriek echoes through the foyer. You quickly head through the cellar door, not caring that it seems to [[slam shut behind you of it's own volition.|CellarEntrance]] <</replace>><</click>></span> <<endif>>
+
+
+:: CellarEntrance
+<<cyclinglink>>
+The room is pitch black, save for a dimly flickering torch on the side of the wall. 
+
+A whispering sound trickles into your ear, leading you closer into the darkness. 
+
+Feeling your way through the cellar, you eventually hit what feels like a unit built into the wall. Feeling around some more, you touch the surface of 
+
+..a box? 
+<<cyclinglink "A" "Her">> voice whispers into your ear, almost seductively. 
+
+"Open it."
+
+[[You turn around|Ghost]]
+
+
+
+:: <<cyclinglink>> [script]
+version.extensions.cyclinglinkMacro = {
+    major: 3,
+    minor: 3,
+    revision: 0
+};
+macros.cyclinglink = {
+    handler: function (a, b, c) {
+        var rl = "cyclingLink";
+
+        function toggleText(w) {
+            w.classList.remove("cyclingLinkInit");
+            w.classList.toggle(rl + "Enabled");
+            w.classList.toggle(rl + "Disabled");
+            w.style.display = ((w.style.display == "none") ? "inline" : "none")
+        }
+        switch (c[c.length - 1]) {
+        case "end":
+            var end = true;
+            c.pop();
+            break;
+        case "out":
+            var out = true;
+            c.pop();
+            break
+        }
+        var v = "";
+        if (c.length && c[0][0] == "$") {
+            v = c[0].slice(1);
+            c.shift()
+        }
+        var h = state.active.variables;
+        if (out && h[v] === "") {
+            return
+        }
+        var l = document.createElement("a");
+        a.appendChild(l);
+        l.className = "internalLink cyclingLink";
+        l.setAttribute("data-cycle", 0);
+        for (var i = 0; i < c.length; i++) {
+            var on = (i == Math.max(c.indexOf(h[v]), 0));
+            var d = insertElement(null, "span", null, "cyclingLinkInit cyclingLink" + ((on) ? "En" : "Dis") + "abled");
+            if (on) {
+                h[v] = c[i];
+                l.setAttribute("data-cycle", i)
+            } else {
+                d.style.display = "none"
+            }
+            insertText(d, c[i]);
+            if (on && end && i == c.length - 1) {
+                l.parentNode.replaceChild(d, l)
+            } else {
+                l.appendChild(d)
+            }
+        }
+        l.onclick = function () {
+            var t = this.childNodes;
+            var u = this.getAttribute("data-cycle") - 0;
+            var m = t.length;
+            toggleText(t[u]);
+            u = (u + 1);
+            if (!(out && u == m)) {
+                u %= m;
+                if (v) {
+                    h[v] = c[u]
+                }
+            } else {
+                h[v] = ""
+            } if ((end || out) && u == m - (end ? 1 : 0)) {
+                if (end) {
+                    var n = this.removeChild(t[u]);
+                    n.className = rl + "End";
+                    n.style.display = "inline";
+                    this.parentNode.replaceChild(n, this)
+                } else {
+                    this.parentNode.removeChild(this);
+                    return
+                }
+                return
+            }
+            toggleText(t[u]);
+            this.setAttribute("data-cycle", u)
+        }
+    }
+};
+
+
+
+:: Toys
+Some wooden blocks spelling out "ROSIE" surround a porcelain doll with long hair that stretches down to it's back. 
+
+You pick it up to examine it <span id="doll"><<click "further">><<replace "#doll">> further and immediately wish you hadn't. 
+
+The doll's face cracks open, revealing a small horde of cockroaches that swarm onto your hand. You curse and throw them off, shaking your head in disbelief as they crawl around the floor. <</replace>><</click>></span>
+
+[[Perhaps you should look around more|Elise's Room]]
+
+
+:: Elise's Room
+Dried pink paint illuminates the door-knob to [[Elise|Elise]]'s room, the only speck of colour in the hall that is now, like the rest of the manor, a decaying husk of it's former glory. 
+
+The door seems to whine as you push it open, the house yawning as if your presence has woken it. 
+
+Entering the room, you find it to be mostly bare. Not too surprising, considering Elise was almost never home once she hit the age of 10. 
+
+Several [[toys|Toys]] are scattered around the room, as well as a surprisingly clean oak [[desk|Desk]] that looks as well-presented as the day it was built. 
+
+The bed is untouched, judging from appearances alone, it seems to have never been slept in. 
+
+If you're finished, you should go back to the [[hallway|Foyer]]
+
+
+:: Katherine's Room Entrance
+<<if $holding is "KatherineKey" or $KatherineRoomVisited is 1>>\ 
+You unlock the door and enter the [[room|KatherineRoom]] 
+<<else>>\
+You grip the doorknob and pull, but nothing happens. Upon closer inspection, the room is locked. You decide to look around for the [[key|Foyer]] 
+<<endif>>
+
+
+:: Ghost
+And you see her. 
+
+Katherine's ghostly figure standing right in front of you. 
+
+It's too late before you realize your hands are slipping into the box
+
+pulling out the revolver inside
+
+"Wait!" you cry 
+
+[[before your hands slip around the gun, pushing it to your head|End]]
+
+
+:: stylesheet [stylesheet]
+ @import url('https://fonts.googleapis.com/css?family=Special+Elite');
+
+#ui-bar {
+	display: none;
+}
+
+body {
+	font-family: Special Elite, cursive;
+    background: #000000;
+	
+	
+}
+.passage {
+	
+	
+	
+}
+.passage a {
+	color: #cc0000; 
+	
+	
+}
+.passage a:hover {
+	color: #800000;
+	
+	
+}
+
+
+
+:: End
+[[The last thing you see is her smiling face bearing down on you before the world goes black.|EndCredits]]
+
+
+
+
+:: EndCredits
+<h1>The End</h1>
+
+<h2>Written by Hazel-Rah for the Gothic Novel Jam 2018</h2>
+
+<h2>[[Thanks for playing!|Menu]]</h2>
+
+
+:: Desk
+The desk is rather bare, again suggesting that this room has remained largely uninhabited. 
+
+A [[music box]] sits in the middle of the desk. 
+
+One of the [[drawers]] is slightly ajar.
+
+You can [[go back|Elise's Room]]
+
+
+:: Elise
+Elise is Katherine's daughter. As far as you can <em>remember</em>, she's thirteen years of age. 
+
+Katherine had her sent off to boarding school a couple of years ago, in one of her letters to you, she wrote 
+
+<em> 
+My love
+
+Regretfully, my darling Elise has had to be sent away to the city's boarding school. She's been ever so troubled after her father passed away, I simply do not know what to do with the child. 
+
+She claims she can hear father's voice from the basement, which surely must be impossible? My dear, I don't think this is a healthy part of the grieving process. Sometimes I can hear her in her room, playing with her dolls when suddenly she'll shout "Papa!" or start crying. It usually takes a while for her to calm down, even with my comforting. 
+
+I'm so dreadfully worried, please write to me soon. 
+
+Katherine </em>
+
+You open your eyes and focus on where you're [[going|Elise's Room]]
+
+
+:: KatherineRoom
+<<set $KatherineRoomVisited to 1>>
+The stench hits you as soon as you walk in. The smell of rot and death. 
+
+Her [[corpse]] lays sprawled out on the bed, her skin the colour of a stormy night, flakes of blood dripping onto the sheets. 
+
+You resist the urge to gag and look around the rest of the room. 
+
+Her [[desk|KatherineDesk]] stands in the corner of the room, worn down from years of usage. 
+
+The [[windowsill]] catches your eye.
+
+You can also [[go back|Foyer]] if you're done.
+
+<<if $holding is "CellarKey">> 
+A loud bang catches your attention from downstairs, you should go check it out. <<endif>>
+
+
+:: music box
+You open up the top of the <span id="musicbox"><<click "music box">><<replace "#musicbox">>music box causing a soothing melody to start playing. 
+
+The music box is largely empty, save for a cracked mirror and some rose-red earrings, the colour having dulled from years of not being used. You begin to <em>remember</em> how Elise used to love wearing this particular set. <</replace>><</click>></span>
+
+[[You decide to keep looking through the desk|Desk]]
+
+
+:: drawers
+After a bit of tugging, the drawer opens itself up for you, revealing a [[key]].
+
+You can also [[go back|Desk]]
+
+
+:: windowsill
+<<cyclinglink>>
+Rain splatters the window, like angels are mourning with you. 
+
+Lightning flashes, illuminating the graveyard below that is filled with rotting, crumbling gravestones, the only remaining proof that people lived here before you.
+
+Before Katherine. 
+
+And now she's gone, part of the foundations of death that this manor was built on.
+
+You blink, what was that? 
+
+<<cyclinglink "An apparition" "A creature" "Katherine">> standing motionless at the front door, <<cyclinglink "watching" "staring at" "judging" "taunting">> you?
+
+[[You look away, shame burning in the pit of your stomach|KatherineRoom]]
+
+
+:: KatherineDesk
+<<cyclinglink>>
+Upon closer examination, her desk is filled with various [[papers]] strewn carelessly over the surface. 
+
+One of the [[desk drawers|deskdrawers]] is slightly ajar, a stench of thick mold floating from it that makes you choke, <<cyclinglink "your eyes watering" "or is it tears?">>
+
+If you are finished, you can [[go back|KatherineRoom]] 
+
+
+:: corpse
+You approach the bed and look closer, noticing a clean, red hole in the middle of her neck. A single line of blood drips from the hole, staining her midnight black dress.
+
+Her dark blue, moon-shaped pendant lies clutched in her right hand. <em>She must have been praying</em>, you think.
+
+A pocket watch with shattered glass sits besides her, the time having stopped at precisely 11 in the eve. 
+
+<em>This must be the time that she had chosen to end it, but why?</em> you think to yourself, struggling to <em>remember</em> your last interaction with her. 
+
+It was a [[fight]].
+
+
+:: key
+<<set $holding to "KatherineKey">> 
+You pick up the key. It seems to shine in your hands as you hold it. <em>This must be the key to Katherine's room</em> you think to yourself as you [[put it in your pocket.|drawers]]
+
+
+:: papers
+A lot of the papers are so stained with ink that they have become illegible.
+
+However, a [[note|KatherineNote]] lays clear above most of the papers, marked with your name on it. 
+
+There is also a [[card|OrphanageCard]] positioned next to the cracked mirror. 
+
+If you are done, you can [[go back|KatherineDesk]]
+
+
+:: deskdrawers
+<<set $holding to "CellarKey">>
+A single, rusted key sits at the bottom of the drawer.
+
+<em>Must be the key for the cellar that she was talking about..</em> you think as you [[take the cellar key|KatherineDesk]]
+
+
+:: fight
+"You don't love me anymore? What's wrong?!" 
+
+Her voice broke your heart. 
+
+You'd gotten drunk. Raised your voice. 
+
+You didn't mean to say that you <em>never loved her</em>.
+
+"Just leave! I can't stand the sight of you!"
+
+You gulped, the taste of whisky and regret pulling at your throat. 
+
+You nodded. 
+
+Said nothing.
+
+Left. 
+
+This is all your fault.
+
+[[You blink, and the memory fades from your vision|KatherineRoom]]
+
+
+:: OrphanageCard
+It's a card for the White Rabbit Home for Orphans. 
+
+<em>Elise..? Katherine must've planned this. Dear god... </em>
+
+[[You pick the card up and place it in your pocket.|KatherineDesk]]
+
+
+:: KatherineNote
+charles
+
+im sorry
+
+i dont want you to leave
+
+please
+
+come home
+
+why did you have to take everything with you 
+
+i miss you
+
+i even left a present for you in the cellar
+
+come home come home come home come home
+
+[[The ink bleeds off the page and stains your boots.|KatherineDesk]]
+
+
